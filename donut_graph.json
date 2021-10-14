@@ -1,0 +1,49 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 400,
+      "height": 400,
+      "title": "Car accidents in Victoria by speed zone",
+      "data": {
+          "url": "https://raw.githubusercontent.com/corner-in-clouds/Xiaoyun.github.io/main/data/a2indexed.csv"
+        },
+    "mark": {"type": "arc", "innerRadius": 120},
+    "encoding": {
+      "theta": {"aggregate":"count","field":"OBJECTID", "title":"number of accidents","stack":null},
+      "color": {"field": "SPEED_ZONE", 
+      "title": "Speed Zone",
+      "type": "nominal",
+      "scale": {
+          "domain": [
+            "30 km/hr",
+            "40 km/hr",
+            "50 km/hr",
+            "60 km/hr",
+            "70 km/hr",
+            "75 km/hr",
+            "80 km/hr",
+            "90 km/hr",
+            "100 km/hr",
+            "110 km/hr",
+            "Camping grounds or off road",
+            "Not known",
+            "Other speed limit"
+          ],
+          "range": [
+            "#dee8be",
+            "#c685a5",
+            "#bacaba",
+            "#7a9d86",
+            "#cbb3aa",
+            "#b2d9d6",
+            "#a8c4d9",
+            "#d5a6bd",
+            "#f9cb9c",
+            "#fce5cd",
+            "#b45f06",
+            "#fadc85",
+            "#c8b5ce"
+          ]
+        }
+    }
+    }
+  }

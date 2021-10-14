@@ -1,0 +1,56 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/corner-in-clouds/Xiaoyun.github.io/main/data/a2indexed.csv"
+  },
+  "title": "Speed zone vs RMA",
+  "width": {"step": 45},
+  "height": {"step": 45},
+  "transform": [
+    {
+      "aggregate": [{"op": "count", "as": "num_acc"}],
+      "groupby": ["SPEED_ZONE", "RMA"]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "SPEED_ZONE",
+      "title": "Speed zone",
+      "type": "ordinal",
+      "axis": {"labelAngle": 45}
+    },
+    "y": {
+      "field": "RMA",
+      "title": "Road Management Act",
+      "type": "ordinal",
+      "axis": {"labelAngle": 0}
+    }
+  },
+  "layer": [
+    {
+      "mark": "rect",
+      "encoding": {
+        "color": {
+          "field": "num_acc",
+          "type": "quantitative",
+          "title": "Count of accidents",
+          "legend": 
+          {"direction": "vertical", 
+          "gradientLength": 270}
+        }
+      }
+    },
+    {
+      "mark": "text",
+      "encoding": {
+        "text": {"field": "num_acc", "type": "quantitative"},
+        "color": {
+          "condition": {"test": "datum['num_acc'] > 500", 
+          "value": "white"},
+          "value": "black"
+        }
+      }
+    }
+  ],
+  "config": {"axis": {"grid": true, "tickBand": "extent"}}
+}

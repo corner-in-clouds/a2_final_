@@ -1,0 +1,130 @@
+{
+   "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+   "width":700,
+   "height":500,
+   "title":"Map for car accidents in Victoria",
+   "projection":{
+      "type":"mercator"
+   },
+   "params":[
+       {
+           "name": "INJ_OR_FATAL",
+           "value": 0,
+           "bind": {
+             "input": "range",
+             "min": 0,
+             "max": 10,
+             "step": 1,
+             "name": "Injury/fatal count: "
+           }
+         },
+      {
+         "name":"Alcohol_selection",
+         "bind":{
+            "input":"select",
+            "options":[
+               null,
+               "Yes",
+               "No"
+            ],
+            "labels":[
+               "Show All",
+               "Alcohol related",
+               "Not alcohol related"
+            ],
+            "name":"Alcohol related: "
+         }
+      }
+   ],
+   "data":{
+      "url":"https://raw.githubusercontent.com/corner-in-clouds/Xiaoyun.github.io/main/js/vicmap.topojson",
+      "format":{
+         "type":"topojson",
+         "feature":"collection"
+      }
+   },
+   "layer":[
+      {
+         "mark":{
+            "type":"geoshape",
+            "fill":"#f2f4fa",
+            "stroke":"#eae4cf"
+         }
+      },
+      {
+         "data":{
+            "url":"https://raw.githubusercontent.com/corner-in-clouds/Xiaoyun.github.io/main/data/a2wonull.csv"
+         },
+         "transform":[
+           {"filter": "datum.INJ_OR_FATAL > INJ_OR_FATAL"},
+           {"filter":"Alcohol_selection == null || datum.ALCOHOL_RELATED == Alcohol_selection"}
+            
+         ],
+         "mark":"circle",
+         "encoding":{
+            "longitude":{
+               "field":"LONGITUDE",
+               "type":"quantitative"
+            },
+            "latitude":{
+               "field":"LATITUDE",
+               "type":"quantitative"
+            },
+            "color":{
+               "field":"ALCOHOLTIME",
+               "type":"nominal",
+               "scale":{
+                  "domain":["Yes","No"],
+                  "range":["#db9903","#8ab3cd"]
+               }
+            },
+            "opacity":{
+               "value":0.4
+            },
+          
+            "tooltip":[
+               {
+                  "field":"LGA_NAME",
+                  "type":"nominal",
+                  "title":"Suburb"
+               },
+               {
+                  "field":"INJ_OR_FATAL",
+                  "type":"quantitative",
+                  "title":"Injury/fatal count"
+               },
+               {
+                  "field":"SPEED_ZONE",
+                  "type":"nominal",
+                  "title":"Speed Zone"
+               },
+               {
+                  "field":"SEVERITY",
+                  "type":"nominal",
+                  "title":"Severity"
+               },
+               {
+                  "field":"DAY_OF_WEEK",
+                  "type":"nominal",
+                  "title":"Day of Week"
+               }]
+               }
+      },
+           {
+             "transform": [
+              {
+                 "window": [{"op": "rank", "as": "ranking"}],
+                 "sort": [{"field": "SERIOUSINJURY", "order": "descending"}]
+              },
+               {"filter": "datum.ranking == 1"},
+               {
+                 "calculate": "'The worst accident in Victoria:T20170001504'",
+                 "as": "text_annotation"
+               }
+             ],
+             "mark": {"type": "text", "align": "left", "dx": 10, "dy": -100},
+             "encoding": {"text": {"field": "text_annotation"}}
+           }
+            
+   ]
+}
